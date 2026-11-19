@@ -1,338 +1,177 @@
-# 🔍 Kripto Piyasa Analiz Botu
+# 🔍 Crypto Market Technical Analysis Bot
 
-[![n8n](https://img.shields.io/badge/n8n-workflow-orange)](https://n8n.io)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Developer](https://img.shields.io/badge/Developer-xCodeWraith-purple)](https://github.com/xcodewraith)
+[![n8n](https://img.shields.io/badge/Workflow-n8n-orange?style=for-the-badge&logo=n8n)](https://n8n.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![Developer](https://img.shields.io/badge/Developer-xCodeWraith%20DEV.-purple?style=for-the-badge)](https://github.com/xCodeWraith)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)
 
-> AI destekli otomatik kripto para piyasa analizi ve Telegram bildirimi sistemi
-
-## 📋 İçindekiler
-
-- [Genel Bakış](#-genel-bakış)
-- [Özellikler](#-özellikler)
-- [Gereksinimler](#-gereksinimler)
-- [Kurulum](#-kurulum)
-- [Yapılandırma](#️-yapılandırma)
-- [Kullanım](#-kullanım)
-- [Workflow Yapısı](#-workflow-yapısı)
-- [API Referansları](#-api-referansları)
-- [Maliyet Analizi](#-maliyet-analizi)
-- [Sorun Giderme](#-sorun-giderme)
-- [Lisans](#-lisans)
+> **Autonomous AI-powered crypto technical analysis, automated TradingView chart rendering, and instant Telegram intelligence broadcasting.**
 
 ---
 
-## 🎯 Genel Bakış
+## 📋 Table of Contents
 
-Bu n8n workflow'u, günde 2 kez otomatik olarak çalışarak:
-
-1. **BTC, ETH, SOL ve XRP** için TradingView grafikleri oluşturur
-2. Web'den **güncel kripto haberlerini** toplar
-3. **AI ile analiz** yaparak anlamlı özetler üretir
-4. Sonuçları **Telegram**'a bildirim olarak gönderir
-
-### Kimler İçin?
-
-- 📈 Kripto yatırımcıları
-- 📊 Günlük piyasa takibi yapanlar
-- 🤖 Otomasyon meraklıları
-- 💼 Portföy yöneticileri
+- [Executive Overview](#-executive-overview)
+- [Key Features](#-key-features)
+- [System Architecture](#-system-architecture)
+- [Prerequisites](#-prerequisites)
+- [Step-by-Step Deployment](#-step-by-step-deployment)
+- [Credential Configuration](#️-credential-configuration)
+- [Customization & Scheduling](#-customization--scheduling)
+- [Cost & API Consumption](#-cost--api-consumption)
+- [Troubleshooting](#-troubleshooting)
+- [License](#-license)
 
 ---
 
-## ✨ Özellikler
+## 🎯 Executive Overview
 
-| Özellik | Açıklama |
-|---------|----------|
-| 📊 **Grafik Analizi** | Chart-img API ile TradingView grafikleri |
-| 🌐 **Haber Toplama** | BrowserAI ile web scraping |
-| 🤖 **AI Analiz** | OpenRouter/GPT ile akıllı özetler |
-| 📱 **Telegram Bildirimi** | Anlık bildirimler |
-| ⏰ **Otomatik Zamanlama** | Günde 2 kez (08:00 & 20:00) |
-| 🔄 **Hata Toleransı** | Otomatik yeniden deneme |
+This autonomous n8n workflow operates scheduled market surveillance twice daily (08:00 & 20:00 UTC), performing end-to-end technical intelligence:
 
----
+1. **Renders multi-asset TradingView charts** for top crypto assets (**BTC, ETH, SOL, XRP**).
+2. **Scrapes breaking crypto market news** across trusted crypto news outlets.
+3. **Synthesizes technical indicators & news** with an LLM (OpenRouter / GPT-4o) into concise, high-conviction market briefings.
+4. **Dispatches rich formatted alerts** directly to your private or team Telegram channel.
 
-## 📋 Gereksinimler
+### Who Is This For?
 
-### Yazılım
-
-- **n8n** v1.0.0 veya üzeri
-- Node.js 18+ (n8n için)
-
-### API Anahtarları
-
-| Servis | Amaç | Kayıt Linki |
-|--------|------|-------------|
-| **Chart-img** | Grafik görüntüleri | [chart-img.com](https://chart-img.com/account/api) |
-| **BrowserAI** | Web scraping | [browser.ai](https://browser.ai/dashboard/page/account/tab/api_key) |
-| **OpenRouter** | AI modeli | [openrouter.ai](https://openrouter.ai/keys) |
-| **Telegram Bot** | Bildirimler | [@BotFather](https://t.me/BotFather) |
+* 📈 **Crypto Traders:** Automated daily technical confluence without staring at charts all day.
+* 📊 **Portfolio Managers:** Systematic, non-emotional morning/evening market briefings.
+* 🤖 **Automation Enthusiasts:** Production reference architecture for multimodal LLM & charting pipelines.
 
 ---
 
-## 🚀 Kurulum
+## ✨ Key Features
 
-### Adım 1: Workflow'u İndirin
+| Feature | Description |
+|---|---|
+| 📊 **Automated Charting** | Generates real-time TradingView chart snapshots via the Chart-img API |
+| 🌐 **News Aggregation** | Live web scraping and headline extraction powered by BrowserAI |
+| 🤖 **AI Confluence Engine** | OpenRouter / GPT-4o synthesizes chart patterns and sentiment into actionable takeaways |
+| 📱 **Telegram Broadcaster** | Rich markdown messages with embedded chart images and entry/invalidation zones |
+| ⏰ **Cron Scheduler** | Configurable bi-daily schedule (defaults to 08:00 & 20:00 UTC) |
+| 🔄 **Fault-Tolerant Retries** | Automatic retry loops on upstream API transient failures |
 
+---
+
+## ⚙️ System Architecture
+
+```
+┌─────────────────────────────────┐
+│   Cron Trigger (08:00 & 20:00)  │
+└─────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────┐       ┌─────────────────────────────────┐
+│   Chart-img API                 │       │   BrowserAI Scraper             │
+│   (TradingView Chart Snapshots) │       │   (Real-Time Crypto Headlines)  │
+└─────────────────────────────────┘       └─────────────────────────────────┘
+                 │                                         │
+                 └───────────────────┬─────────────────────┘
+                                     │
+                                     ▼
+                      ┌─────────────────────────────┐
+                      │   OpenRouter / GPT-4o       │
+                      │   Synthesizes Chart + News  │
+                      └─────────────────────────────┘
+                                     │
+                                     ▼
+                      ┌─────────────────────────────┐
+                      │   Telegram Bot Dispatch     │
+                      │   (Formatted Message + Img) │
+                      └─────────────────────────────┘
+```
+
+---
+
+## 📋 Prerequisites
+
+### Core Software
+* **n8n** v1.0.0 or higher (Self-Hosted Docker, Desktop, or n8n Cloud)
+* **Node.js 18+** (if running n8n via npm)
+
+### API Credentials Required
+
+| Service | Purpose | Registration Link |
+|---|---|---|
+| **Chart-img** | Chart snapshot generation | [chart-img.com](https://chart-img.com/account/api) |
+| **BrowserAI** | Automated web scraping | [browser.ai](https://browser.ai) |
+| **OpenRouter** | LLM API routing | [openrouter.ai](https://openrouter.ai/keys) |
+| **Telegram Bot** | Signal broadcasting | [@BotFather](https://t.me/BotFather) |
+
+---
+
+## 🚀 Step-by-Step Deployment
+
+### Step 1: Clone the Repository
 ```bash
-# Repository'yi klonlayın
-git clone https://github.com/xcodewraith/n8n-workflows.git
-
-# Klasöre gidin
-cd n8n-workflows/kripto-piyasa-analiz-botu
+git clone https://github.com/xCodeWraith/kripto-market-analiz.git
+cd kripto-market-analiz
 ```
 
-### Adım 2: n8n'e Import Edin
+### Step 2: Import into n8n
+1. Open your n8n web dashboard.
+2. Navigate to **Workflows** → Click **"Import from File"**.
+3. Select `kripto-piyasa-analiz-botu.json` and click **Import**.
 
-1. n8n arayüzünü açın
-2. **Settings** → **Import from File** seçin
-3. `kripto-piyasa-analiz-botu.json` dosyasını seçin
-4. **Import** butonuna tıklayın
+### Step 3: Configure Node Credentials
+Set up the following credentials in your n8n dashboard:
 
-### Adım 3: Credential'ları Ayarlayın
+#### 1. Chart-img API
+* **Credential Type:** `HTTP Bearer Auth`
+* **Token:** `YOUR_CHARTIMG_API_KEY`
 
-n8n'de şu credential'ları oluşturun:
+#### 2. BrowserAI API
+* **Credential Type:** `HTTP Bearer Auth`
+* **Token:** `YOUR_BROWSERAI_API_KEY`
 
-#### Chart-img API
-```
-Credential Type: HTTP Bearer Auth
-Token: YOUR_CHARTIMG_API_KEY
-```
+#### 3. OpenRouter API
+* **Credential Type:** `OpenRouter API` (or standard OpenAI Header Auth)
+* **API Key:** `YOUR_OPENROUTER_API_KEY`
 
-#### BrowserAI API
-```
-Credential Type: HTTP Bearer Auth
-Token: YOUR_BROWSERAI_API_KEY
-```
-
-#### OpenRouter API
-```
-Credential Type: OpenRouter API
-API Key: YOUR_OPENROUTER_API_KEY
-```
-
-#### Telegram Bot
-```
-Credential Type: Telegram API
-Bot Token: YOUR_BOT_TOKEN
-```
+#### 4. Telegram Bot API
+* **Credential Type:** `Telegram API`
+* **Bot Token:** `YOUR_BOT_TOKEN`
 
 ---
 
-## ⚙️ Yapılandırma
+## ⚙️ Configuration & Customization
 
-### Telegram Chat ID
-
-`Send a text message` node'unda `chatId` değerini ayarlayın:
-
+### Target Assets & Symbols
+To add or modify monitored assets, edit the parameters in the chart generator node:
 ```json
 {
-  "chatId": "YOUR_CHAT_ID"
-}
-```
-
-Chat ID'nizi bulmak için:
-1. Telegram'da [@userinfobot](https://t.me/userinfobot) ile mesajlaşın
-2. `/start` gönderin
-3. ID'nizi kopyalayın
-
-### Zamanlama Ayarları
-
-Varsayılan: Günde 2 kez (08:00 & 20:00 TR saati)
-
-```
-Cron: 0 5,17 * * *  (UTC)
-```
-
-Değiştirmek için `Schedule Trigger` node'unu düzenleyin.
-
-### Desteklenen Kripto Paralar
-
-Varsayılan:
-- BTC/USD
-- ETH/USD
-- SOL/USD
-- XRP/USD
-
-Yeni coin eklemek için:
-1. İlgili chart node'unu kopyalayın
-2. Symbol'ü değiştirin (örn: `BINANCE:DOGEUSD`)
-3. Merge node'larına bağlayın
-
----
-
-## 📖 Kullanım
-
-### Manuel Çalıştırma
-
-1. n8n'de workflow'u açın
-2. **Execute Workflow** butonuna tıklayın
-3. Sonuçları Telegram'da görün
-
-### Otomatik Çalıştırma
-
-1. Workflow'u **Active** duruma getirin
-2. Belirlenen saatlerde otomatik çalışacak
-
-### Örnek Çıktı
-
-```
-Here's your half-day crypto update as of 19-December-2024:
-
-💸 Bitcoin - Bitcoin rallied to $104k amid ETF inflows 
-   exceeding $500M. Chart shows strong bullish structure.
-
-💸 Ethereum - ETH consolidated at $3,800 while Pectra 
-   upgrade timeline announced.
-
-💸 Solana - SOL jumped 8% following new DeFi launches.
-
-💸 XRP - XRP maintained $2.50 as Ripple developments continue.
-```
-
----
-
-## 🔄 Workflow Yapısı
-
-```
-┌─────────────────┐
-│ Schedule Trigger│ ← Günde 2 kez
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Tarih Hesapla  │
-└────────┬────────┘
-         │
-    ┌────┴────────────────────────┐
-    │       PARALEL İŞLEM         │
-    ▼                             ▼
-┌─────────────┐            ┌─────────────┐
-│ Chart-img   │            │ BrowserAI   │
-│ (4 Grafik)  │            │ (Haberler)  │
-└──────┬──────┘            └──────┬──────┘
-       │                          │
-       ▼                          ▼
-┌─────────────┐            ┌─────────────┐
-│ AI Grafik   │            │ Durum       │
-│ Analizi     │            │ Kontrolü    │
-└──────┬──────┘            └──────┬──────┘
-       │                          │
-       └──────────┬───────────────┘
-                  ▼
-           ┌─────────────┐
-           │  AI Özet    │
-           │  Oluşturma  │
-           └──────┬──────┘
-                  ▼
-           ┌─────────────┐
-           │  Telegram   │
-           │  Gönder     │
-           └─────────────┘
-```
-
----
-
-## 📚 API Referansları
-
-### Chart-img API
-
-```json
-POST https://api.chart-img.com/v2/tradingview/advanced-chart
-
-{
-  "symbol": "BINANCE:BTCUSD",
-  "interval": "1h",
-  "width": 800,
-  "height": 600,
-  "style": "candle",
+  "symbols": ["BINANCE:BTCUSDT", "BINANCE:ETHUSDT", "BINANCE:SOLUSDT", "BINANCE:XRPUSDT"],
+  "interval": "4h",
   "theme": "dark"
 }
 ```
 
-[Dokümantasyon](https://chart-img.com/docs)
-
-### BrowserAI API
-
-```json
-POST https://browser.ai/api/v1/tasks
-
-{
-  "type": "crawler_automation",
-  "instructions": [{
-    "action": "Gather cryptocurrency news..."
-  }]
-}
-```
-
-[Dokümantasyon](https://browser.ai/docs)
+### Telegram Target Channel
+In the `Telegram: Send Message` node:
+* **Chat ID:** Set your personal Telegram User ID or `@your_channel_name`.
+* Ensure your bot is added as an Administrator in your target channel.
 
 ---
 
-## 💰 Maliyet Analizi
+## 💰 Estimated Cost Breakdown
 
-| Servis | Günlük Kullanım | Aylık Maliyet |
-|--------|-----------------|---------------|
-| Chart-img | 8 grafik | **Ücretsiz** |
-| BrowserAI | 2 task | **Ücretsiz** |
-| OpenRouter | ~4 çağrı | ~$3-5 |
-| Telegram | Sınırsız | **Ücretsiz** |
-| **Toplam** | | **~$5/ay** |
-
----
-
-## 🔧 Sorun Giderme
-
-### Chart-img Hatası
-
-```
-Error: 401 Unauthorized
-```
-
-**Çözüm:** API anahtarınızı kontrol edin, Bearer token olarak ayarlandığından emin olun.
-
-### BrowserAI Timeout
-
-```
-Error: Task timeout
-```
-
-**Çözüm:** Wait sürelerini artırın (varsayılan: 45 saniye)
-
-### Telegram Gönderim Hatası
-
-```
-Error: Chat not found
-```
-
-**Çözüm:** Bot'u gruba ekleyin veya Chat ID'yi kontrol edin.
+| Component | Daily Requests | Monthly Cost |
+|---|---|---|
+| **Chart-img API** | ~8 requests/day | Free tier / ~$5 mo |
+| **BrowserAI** | ~2 requests/day | Free credits |
+| **OpenRouter (GPT-4o)** | ~2 runs/day | ~$0.30 - $0.90 / mo |
+| **n8n Self-Hosted** | Unlimited | Free (Open-Source) |
 
 ---
 
-## ⚠️ Yasal Uyarı
+## 🛠️ Troubleshooting
 
-> Bu workflow yalnızca **kişisel kullanım** içindir ve **yatırım tavsiyesi** niteliği taşımaz. Bu aracı kullanarak yapılan işlemlerden kullanıcı sorumludur.
-
----
-
-## 📄 Lisans
-
-MIT License - Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+* **Chart image not rendering in Telegram:** Ensure Chart-img returned a valid binary image and Telegram media upload permissions are granted to your bot.
+* **OpenRouter timeout:** If responses take longer than 30s, increase the timeout limit in the HTTP Request node to 60000ms.
+* **Rate limit errors:** Verify your Chart-img plan accommodates 4 requests in sequence or insert a 2-second delay node between asset queries.
 
 ---
 
-## 👤 Geliştirici
-
-**xCodeWraith (DEV)**
-
-- GitHub: [@xcodewraith](https://github.com/xcodewraith)
-
----
-
-## 🙏 Teşekkürler
-
-- [n8n](https://n8n.io) - Workflow otomasyon platformu
-- [Chart-img](https://chart-img.com) - TradingView grafik API
-- [BrowserAI](https://browser.ai) - AI web scraping
-- [OpenRouter](https://openrouter.ai) - AI model erişimi
+**Maintained by:** [xCodeWraith DEV.](https://github.com/xCodeWraith)  
+**License:** [MIT](LICENSE)
